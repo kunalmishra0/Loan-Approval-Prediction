@@ -1,0 +1,59 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Packaging and build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Test, type-checking, and coverage caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Temporary files and logs
+*.log
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Model and experiment caches
+.cache/
+mlruns/
+wandb/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Keep the small demo model artifact tracked so a fresh clone can run the app.
+# For large or frequently generated artifacts, use Git LFS or a model registry.
+# models/*.pkl

@@ -1,0 +1,75 @@
+{
+    "best_algorithm": "Logistic Regression",
+    "accuracy": 0.8617886178861789,
+    "precision": 0.84,
+    "recall": 0.9882352941176471,
+    "f1": 0.9081081081081082,
+    "roc_auc": 0.8526315789473684,
+    "number_of_training_samples": 491,
+    "number_of_testing_samples": 123,
+    "number_of_input_features": 11,
+    "transformed_feature_names": [
+        "ApplicantIncome",
+        "CoapplicantIncome",
+        "LoanAmount",
+        "Loan_Amount_Term",
+        "Credit_History",
+        "Gender_Male",
+        "Married_Yes",
+        "Dependents_0",
+        "Dependents_1",
+        "Dependents_2",
+        "Dependents_3+",
+        "Education_Not Graduate",
+        "Self_Employed_Yes",
+        "Property_Area_Rural",
+        "Property_Area_Semiurban",
+        "Property_Area_Urban"
+    ],
+    "target_mapping": {
+        "N": 0,
+        "Y": 1
+    },
+    "inverse_target_mapping": {
+        "0": "N",
+        "1": "Y"
+    },
+    "confusion_matrix_path": "C:\\Users\\kunal\\OneDrive\\Desktop\\Coding\\Project\\mlintern\\project 1 - loan approval predictor\\reports\\figures\\confusion_matrix.png",
+    "timestamp": "2026-07-28T11:44:13.236798+00:00",
+    "sklearn_version": "1.5.1",
+    "python_version": "3.11.0",
+    "cross_validation_comparison": [
+        {
+            "Algorithm": "Logistic Regression",
+            "Accuracy": 0.7982890125747268,
+            "Precision": 0.7830605666882255,
+            "Recall": 0.9792361720807726,
+            "F1 Score": 0.8699482746018251,
+            "ROC AUC": 0.7259963937428606
+        },
+        {
+            "Algorithm": "XGBoost",
+            "Accuracy": 0.7758606472892188,
+            "Precision": 0.7801206045181949,
+            "Recall": 0.9407813871817385,
+            "F1 Score": 0.852405531375901,
+            "ROC AUC": 0.755390268770002
+        },
+        {
+            "Algorithm": "Random Forest",
+            "Accuracy": 0.7698206555349413,
+            "Precision": 0.7792017809241085,
+            "Recall": 0.9290166812993853,
+            "F1 Score": 0.8469749557453022,
+            "ROC AUC": 0.7565868947482701
+        },
+        {
+            "Algorithm": "Decision Tree",
+            "Accuracy": 0.7025974025974027,
+            "Precision": 0.7795300836227711,
+            "Recall": 0.7924495171202809,
+            "F1 Score": 0.7850633279123855,
+            "ROC AUC": 0.6494505650117534
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+pandas==2.2.2              # Data loading, cleaning, and DataFrame-based preprocessing
+numpy==1.26.4              # Numerical operations used by pandas, sklearn, and model workflows
+scikit-learn==1.5.1        # Preprocessing pipelines, classical ML models, and evaluation metrics
+xgboost==2.1.1             # Gradient boosting model for stronger tabular classification performance
+matplotlib==3.9.2          # Core plotting library for EDA and evaluation visualizations
+seaborn==0.13.2            # Statistical plots for EDA, distributions, and feature relationships
+joblib==1.4.2              # Efficient serialization of the trained sklearn pipeline/model
+streamlit==1.37.1          # Web application interface for model inference
+kagglehub[pandas-datasets]==1.0.2  # Download and load the Kaggle loan dataset as pandas DataFrames
