@@ -247,6 +247,3 @@ This project is released under the [MIT License](LICENSE). Dataset usage remains
 **Kunal Mishra**
 
 Built as a B.Tech project, internship portfolio project, and demonstration of production-oriented machine learning workflow design.
-
-#   L o a n - A p p r o v a l - P r e d i c t i o n  
- 
