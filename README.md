@@ -3,7 +3,6 @@
 [![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.5.1-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.37.1-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A production-structured machine learning project that predicts whether a loan application is likely to be approved using the Kaggle Loan Prediction Dataset.
 
@@ -11,11 +10,39 @@ A production-structured machine learning project that predicts whether a loan ap
 
 Loan approval decisions depend on multiple applicant, financial, and credit-history attributes. This project builds an end-to-end supervised classification workflow that explores the data, compares several classifiers, serializes the complete winning pipeline, and exposes it through a Streamlit interface.
 
-This is an educational decision-support project. It must not be used for actual financial decisions or automated credit underwriting.
-
 ## Business Problem
 
 Financial institutions need consistent preliminary screening of loan applications. A reliable predictive model can help demonstrate how applicant information relates to historical approval outcomes and provide a basis for further review.
+
+## Application
+
+### Home
+
+![Home](docs/images/home.png)
+
+### Prediction
+
+![Prediction](docs/images/prediction.png)
+
+### Rejected Example
+
+![Rejected](docs/images/rejected.png)
+
+## Quick Start
+
+```bash
+git clone https://github.com/kunalmishra0/Loan-Approval-Prediction.git
+
+cd Loan-Approval-Prediction
+
+python -m venv .venv
+
+pip install -r requirements.txt
+
+python -m src.train
+
+streamlit run app/streamlit_app.py
+```
 
 ## Machine Learning Objective
 
@@ -190,13 +217,13 @@ The approval probability is the probability assigned to the approved class. Conf
 
 The current saved model was selected using stratified cross-validation and evaluated on a holdout test split.
 
-| Metric | Holdout score |
-|---|---:|
-| Accuracy | 0.862 |
-| Precision | 0.840 |
-| Recall | 0.988 |
-| F1 Score | 0.908 |
-| ROC AUC | 0.853 |
+| Metric    | Holdout score |
+| --------- | ------------: |
+| Accuracy  |         0.862 |
+| Precision |         0.840 |
+| Recall    |         0.988 |
+| F1 Score  |         0.908 |
+| ROC AUC   |         0.853 |
 
 **Best model:** Logistic Regression
 
@@ -219,6 +246,7 @@ The model also learned positive associations for `Married = Yes`, `Property_Area
 Applicant income has a positive but relatively weak effect, while loan amount has a slightly negative effect. `Self_Employed = Yes` has a slightly negative association in this historical dataset, which should not be interpreted as a general rule about self-employed applicants. The current model does not explicitly calculate total income, income-to-loan ratio, or repayment burden.
 
 These are historical model associations, not causal conclusions or lending policies. See the EDA notebook for the supporting analysis and limitations.
+
 ## Limitations
 
 - The dataset is small and historical.
@@ -232,18 +260,6 @@ These are historical model associations, not causal conclusions or lending polic
 
 Potential next steps include probability calibration, subgroup fairness analysis, automated testing and CI/CD, Docker packaging, FastAPI serving, cloud deployment, monitoring, and SHAP-based explainability. See [docs/future_scope.md](docs/future_scope.md).
 
-## Model Artifact Policy
-
-`models/loan_model.pkl` is intentionally not ignored because it is small and allows a fresh GitHub clone to run the Streamlit application immediately. Pickle/joblib artifacts must be treated as trusted files and should not be loaded from untrusted sources.
-
-For larger or frequently retrained models, use Git LFS or a model registry and ignore generated artifacts in the Git repository. The repository should then document the exact artifact download and versioning process.
-
-## License
-
-This project is released under the [MIT License](LICENSE). Dataset usage remains subject to the Kaggle dataset's terms and attribution requirements.
-
 ## Author
 
 **Kunal Mishra**
-
-Built as a B.Tech project, internship portfolio project, and demonstration of production-oriented machine learning workflow design.
