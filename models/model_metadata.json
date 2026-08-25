@@ -34,8 +34,9 @@
         "0": "N",
         "1": "Y"
     },
-    "confusion_matrix_path": "C:\\Users\\kunal\\OneDrive\\Desktop\\Coding\\Project\\mlintern\\project 1 - loan approval predictor\\reports\\figures\\confusion_matrix.png",
-    "timestamp": "2026-07-28T11:44:13.236798+00:00",
+    "confusion_matrix_path": "reports/figures/confusion_matrix.png",
+    "roc_curve_path": "reports/figures/roc_curve.png",
+    "timestamp": "2026-08-25T00:10:12.089536+00:00",
     "sklearn_version": "1.5.1",
     "python_version": "3.11.0",
     "cross_validation_comparison": [

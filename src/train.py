@@ -1,4 +1,4 @@
-﻿"""Model training pipeline for the Loan Approval Prediction project."""
+"""Model training pipeline for the Loan Approval Prediction project."""
 
 from __future__ import annotations
 
@@ -25,6 +25,7 @@ from sklearn.metrics import (
     precision_score,
     recall_score,
     roc_auc_score,
+    roc_curve,
 )
 from sklearn.model_selection import StratifiedKFold, cross_validate
 from sklearn.model_selection import train_test_split
@@ -34,11 +35,14 @@ from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
 from src.config import (
+    CONFUSION_MATRIX_PATH,
     FIGURES_DIR,
     MODEL_METADATA_PATH,
     MODEL_PATH,
     OUTPUT_DIRS,
+    PROJECT_ROOT,
     RANDOM_SEED,
+    ROC_CURVE_PATH,
     TARGET_COLUMN,
     TEST_SIZE,
 )
@@ -313,7 +317,7 @@ def save_confusion_matrix(
     pipeline: Pipeline,
     x_test: pd.DataFrame,
     y_test: pd.Series,
-    output_path: Path = FIGURES_DIR / "confusion_matrix.png",
+    output_path: Path = CONFUSION_MATRIX_PATH,
 ) -> Path:
     """Save a confusion matrix image for the final selected model."""
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -324,6 +328,49 @@ def save_confusion_matrix(
     display.figure_.savefig(output_path, bbox_inches="tight", dpi=150)
     plt.close(display.figure_)
     logger.info("Saved confusion matrix to %s", output_path)
+
+    return output_path
+
+
+def save_roc_curve(
+    pipeline: Pipeline,
+    x_test: pd.DataFrame,
+    y_test: pd.Series,
+    output_path: Path = ROC_CURVE_PATH,
+) -> Path:
+    """Save a Receiver Operating Characteristic (ROC) curve image for the final selected model."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    positive_class_scores = _get_positive_class_scores(pipeline, x_test)
+    fpr, tpr, _ = roc_curve(y_test, positive_class_scores)
+    auc_score = roc_auc_score(y_test, positive_class_scores)
+
+    fig, ax = plt.subplots(figsize=(6, 5))
+    ax.plot(
+        fpr,
+        tpr,
+        color="#1f77b4",
+        lw=2,
+        label=f"ROC Curve (AUC = {auc_score:.4f})",
+    )
+    ax.plot(
+        [0, 1],
+        [0, 1],
+        color="gray",
+        lw=1.5,
+        linestyle="--",
+        label="Chance Level (AUC = 0.50)",
+    )
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
+    ax.set_xlabel("False Positive Rate")
+    ax.set_ylabel("True Positive Rate")
+    ax.set_title("Receiver Operating Characteristic (ROC) Curve")
+    ax.legend(loc="lower right")
+    ax.grid(True, linestyle=":", alpha=0.6)
+
+    fig.savefig(output_path, bbox_inches="tight", dpi=150)
+    plt.close(fig)
+    logger.info("Saved ROC curve to %s", output_path)
 
     return output_path
 
@@ -343,6 +390,7 @@ def _build_metadata(
     x_test: pd.DataFrame,
     target_mapping: dict[str, int],
     confusion_matrix_path: Path,
+    roc_curve_path: Path,
 ) -> dict[str, Any]:
     """Build serializable metadata for the selected model."""
     preprocessor = best_pipeline.named_steps["preprocessor"]
@@ -350,6 +398,16 @@ def _build_metadata(
         str(encoded_value): label
         for label, encoded_value in target_mapping.items()
     }
+
+    try:
+        cm_path_str = confusion_matrix_path.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        cm_path_str = confusion_matrix_path.as_posix()
+
+    try:
+        roc_path_str = roc_curve_path.relative_to(PROJECT_ROOT).as_posix()
+    except ValueError:
+        roc_path_str = roc_curve_path.as_posix()
 
     return {
         "best_algorithm": best_algorithm,
@@ -366,7 +424,8 @@ def _build_metadata(
         ),
         "target_mapping": target_mapping,
         "inverse_target_mapping": inverse_target_mapping,
-        "confusion_matrix_path": str(confusion_matrix_path),
+        "confusion_matrix_path": cm_path_str,
+        "roc_curve_path": roc_path_str,
         "timestamp": datetime.now(timezone.utc).isoformat(),
         "sklearn_version": sklearn.__version__,
         "python_version": platform.python_version(),
@@ -396,6 +455,11 @@ def main() -> None:
         x_test,
         y_test,
     )
+    roc_curve_path = save_roc_curve(
+        best_pipeline,
+        x_test,
+        y_test,
+    )
 
     metadata = _build_metadata(
         best_algorithm=best_algorithm,
@@ -406,6 +470,7 @@ def main() -> None:
         x_test=x_test,
         target_mapping=target_mapping,
         confusion_matrix_path=confusion_matrix_path,
+        roc_curve_path=roc_curve_path,
     )
 
     save_model(best_pipeline)

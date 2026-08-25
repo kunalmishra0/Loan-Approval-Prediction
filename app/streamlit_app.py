@@ -1,4 +1,4 @@
-﻿"""Streamlit interface for Loan Approval Prediction."""
+"""Streamlit interface for Loan Approval Prediction."""
 
 from __future__ import annotations
 
@@ -14,6 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from src.config import CONFUSION_MATRIX_PATH, ROC_CURVE_PATH
 from src.predict import load_metadata as load_model_metadata
 from src.predict import load_pipeline, predict
 
@@ -190,6 +191,42 @@ def display_prediction(result: pd.Series) -> None:
     st.info(DISCLAIMER)
 
 
+def render_model_diagnostics(metadata: dict[str, Any]) -> None:
+    """Display model evaluation charts (ROC curve and confusion matrix)."""
+    st.subheader("Model Diagnostics & Evaluation")
+    col1, col2 = st.columns(2)
+
+    roc_path_str = metadata.get("roc_curve_path")
+    roc_path = Path(roc_path_str) if roc_path_str else ROC_CURVE_PATH
+    if not roc_path.is_absolute():
+        roc_path = PROJECT_ROOT / roc_path
+
+    cm_path_str = metadata.get("confusion_matrix_path")
+    cm_path = Path(cm_path_str) if cm_path_str else CONFUSION_MATRIX_PATH
+    if not cm_path.is_absolute():
+        cm_path = PROJECT_ROOT / cm_path
+
+    with col1:
+        if roc_path.exists():
+            st.image(
+                str(roc_path),
+                caption="Receiver Operating Characteristic (ROC) Curve",
+                use_column_width=True,
+            )
+        else:
+            st.info("ROC Curve image not found.")
+
+    with col2:
+        if cm_path.exists():
+            st.image(
+                str(cm_path),
+                caption="Confusion Matrix",
+                use_column_width=True,
+            )
+        else:
+            st.info("Confusion Matrix image not found.")
+
+
 def main() -> None:
     """Render the Streamlit application."""
     st.set_page_config(
@@ -216,6 +253,10 @@ def main() -> None:
         return
 
     render_sidebar(metadata)
+
+    with st.expander("View Model Evaluation & Diagnostic Charts"):
+        render_model_diagnostics(metadata)
+
     user_input = collect_user_input()
 
     if user_input is None:

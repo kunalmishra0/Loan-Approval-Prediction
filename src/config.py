@@ -39,6 +39,13 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 FIGURES_DIR = REPORTS_DIR / "figures"
 """Directory for plots generated during EDA and model evaluation."""
 
+CONFUSION_MATRIX_PATH = FIGURES_DIR / "confusion_matrix.png"
+"""Path where the model confusion matrix plot is saved."""
+
+ROC_CURVE_PATH = FIGURES_DIR / "roc_curve.png"
+"""Path where the model ROC curve plot is saved."""
+
+
 RANDOM_SEED = 42
 """Random seed used for reproducible splits and model training."""
 
